@@ -35,7 +35,7 @@ JPEGSRC=jpegsrc.v8d
 # for jpeg, there is a mismatch between the file name and the TLD name
 TIFF=tiff-4.3.0
 PNG=libpng-1.6.2
-HDF4=hdf4-4.2.15
+HDF4=hdf-4.2.15
 HDF5=hdf5-1.8.21
 
 # use HDF5-1.8 because 1.10 causes problems with simultaneous reading
@@ -45,7 +45,7 @@ PKGURLS=(
  $JPEG $JPEGSRC.tar.gz http://www.ijg.org/files/$JPEGSRC.tar.gz a9b1082e69db9920714b24e89066c7d3
  $TIFF $TIFF.tar.gz http://download.osgeo.org/libtiff/$TIFF.tar.gz 0a2e4744d1426a8fc8211c0cdbc3a1b3
  $PNG $PNG.tar.gz "http://prdownloads.sourceforge.net/libpng/$PNG.tar.gz?download" b9f33116aafde244d04caf1ee19eb573
- $HDF4 $HDF4.tar.bz2 https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.15/src/hdf-4.2.15.tar.bz2 27ab87b22c31906883a0bfaebced97cb
+ $HDF4 $HDF4.tar.bz2 https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.15/src/$HDF4.tar.bz2 27ab87b22c31906883a0bfaebced97cb
  $HDF5 $HDF5.tar.bz2 https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/$HDF5/src/$HDF5.tar.bz2 2d2408f2a9dfb5c7b79998002e9a90e9
 )
 
@@ -141,32 +141,18 @@ for i in ${!PKGS[@]}; do
 	fi
 done
 
-error Mist
-exit 
-
-#cd sources
-#tar -xvf zlib-1.2.8.tar.gz 
-#cd zlib-1.2.8
-#patch -p1 < ../../zlib-1.2.8.patch
-#cd ..
-#tar -xvf jpegsrc.v8d.tar.gz
-#tar -xvf libpng-1.6.2.tar.gz 
-#tar -xvf tiff-4.0.3.tar.gz
-#tar -xvf hdf-4.2.14.tar.bz2
-#tar -xvf $HDF5.tar.bz2
-#cd ..
-#
 # create build directory
 rm -rf build hdf4_build hdf5_build
 mkdir -p build
 
+
 # make zlib
-cd sources/$ZLIB
+cd "$srcdir/$ZLIB"
 CFLAGS="-fPIC" ./configure --static --64 --prefix=$topdir/build
 make && make install
 cd $topdir
 
-cd sources/$JPEG
+cd "$srcdir/$JPEG"
 ./configure --enable-static --disable-shared --with-pic \
 	--prefix=$topdir/build \
 	--includedir=$topdir/build/include \
@@ -174,7 +160,7 @@ cd sources/$JPEG
 make && make install
 cd $topdir
 
-cd sources/$PNG
+cd "$srcdir/$PNG"
 ./configure --enable-static --disable-shared --with-pic \
 	--prefix=$topdir/build \
 	--includedir=$topdir/build/include \
@@ -182,7 +168,7 @@ cd sources/$PNG
 make && make install
 cd $topdir
 
-cd sources/$TIFF
+cd "$srcdir/$TIFF"
 ./configure --enable-static --disable-shared --prefix=$topdir/build --with-pic --without-x \
 	--includedir=$topdir/build/include \
 	--libdir=$topdir/build/lib \
@@ -193,10 +179,11 @@ cd sources/$TIFF
 	--disable-cxx 
 	
 make && make install
-cd $topdir
+cd "$topdir"
 
+## HDF4
 if [ "X$autoconf_hdf4" = "Xyes" ]; then 
-cd sources/$HDF4
+cd "$srcdir/$HDF4"
 ./configure LIBS=$HDF4_EXTRA_LIBS --enable-static --disable-shared --prefix=$topdir/build --with-pic \
 	--disable-fortran \
 	--disable-netcdf \
@@ -206,7 +193,7 @@ cd sources/$HDF4
 	--with-zlib=$topdir/build/ \
 	--with-jpeg=$topdir/build/ && \
 make && make install
-cd $topdir
+cd "$topdir"
 else
 
 	if $windows; then 
@@ -226,16 +213,18 @@ else
 	    -DHDF4_BUILD_FORTRAN:BOOL=OFF \
 	    -DHDF4_ENABLE_SZIP_SUPPORT:BOOL=OFF \
 	    -DHDF4_ENABLE_Z_LIB_SUPPORT:BOOL=ON \
-	    -DZLIB_ROOT:PATH=$topdir/build/ \
-	    -DJPEG_ROOT:PATH=$topdir/build/ \
+	    -DZLIB_ROOT:PATH="$topdir/build/" \
+	    -DJPEG_ROOT:PATH="$topdir/build/" \
 	    "-G$generator" \
-	    -DCMAKE_INSTALL_PREFIX:PATH=$topdir/build/ \
-	    ../sources/$HDF4
+	    -DCMAKE_INSTALL_PREFIX:PATH="$topdir/build/" \
+	    "$srcdir/$HDF4"
 	make install
-	cd $topdir
+	cd "$topdir"
 
 fi
+exit -1
 
+## HDF5
 if $windows; then
 	# on Windows MINGW, cmake must be used to compile HDF5
 	# autoconf does not work there
@@ -267,12 +256,13 @@ if $windows; then
 
 
 else
-	cd sources/$HDF5
+	cd "$srcdir/$HDF5"
 	./configure --enable-static --disable-shared --prefix=$topdir/build --with-pic \
 		--disable-fortran \
 		--includedir=$topdir/build/include \
 		--libdir=$topdir/build/lib \
-		--with-zlib=$topdir/build/
+		--with-zlib=$topdir/build/ \
+		--enable-cxx
 		
 	make && make install
 	cd $topdir
