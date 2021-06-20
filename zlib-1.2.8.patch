@@ -1,0 +1,12 @@
+diff -ruN zlib-1.2.8/configure zlib-1.2.8-patched/configure
+--- zlib-1.2.8/configure	2013-03-24 06:30:09.000000000 +0100
++++ zlib-1.2.8-patched/configure	2019-07-09 10:01:38.143527100 +0200
+@@ -194,7 +194,7 @@
+ # temporary bypass
+         rm -f $test.[co] $test $test$shared_ext
+         echo "Please use win32/Makefile.gcc instead." | tee -a configure.log
+-        leave 1
++        #leave 1
+         LDSHARED=${LDSHARED-"$cc -shared"}
+         LDSHAREDLIBC=""
+         EXE='.exe' ;;
