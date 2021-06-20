@@ -222,7 +222,6 @@ else
 	cd "$topdir"
 
 fi
-exit -1
 
 ## HDF5
 if $windows; then
