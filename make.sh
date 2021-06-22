@@ -76,13 +76,17 @@ esac
 # check for md5sum 
 echo "Checking for md5 program..."
 if command -v md5sum; then
-	MD5=md5sum
+	MD5=md5short
 elif command -v md5; then
 	MD5="md5 -q"
 else
 	echo "MD5 not found"
 	exit -1
 fi
+
+function md5short() {
+	md5sum "$1" | awk '{print $1}'
+}
 
 function download() {
 	# FILE URL HASH
