@@ -2,7 +2,7 @@
 #
 #  This script downloads and builds statically linked libraries for image and data processing
 #
-#  (C) Copyright 2021 Physikalisch-Technische Bundesanstalt 
+#  (C) Copyright 2021 Physikalisch-Technische Bundesanstalt (PTB)
 #  Christian Gollwitzer
 #  
 #   This program is free software: you can redistribute it and/or modify
