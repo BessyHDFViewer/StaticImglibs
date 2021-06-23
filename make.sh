@@ -60,6 +60,12 @@ topdir=$(dirname "$0")
 cd "$topdir"
 topdir=$(pwd)
 
+# define the output file
+machine=$(uname -sm | tr ' ' '-')
+pkgname="StaticImglibs_$machine"
+pkgdir="$topdir/$pkgname"
+pkgfile="$pkgdir.tar.bz2"
+
 srcdir="$topdir/sources"
 mkdir -p "$srcdir"
 
@@ -146,40 +152,40 @@ for i in ${!PKGS[@]}; do
 done
 
 # create build directory
-rm -rf build hdf4_build hdf5_build
+rm -rf build hdf4_build hdf5_build "$pkgdir"
 mkdir -p build
 
 
 # make zlib
 cd "$srcdir/$ZLIB"
-CFLAGS="-fPIC" ./configure --static --64 --prefix=$topdir/build
+CFLAGS="-fPIC" ./configure --static --64 --prefix="$topdir/build"
 make && make install
 cd $topdir
 
 cd "$srcdir/$JPEG"
 ./configure --enable-static --disable-shared --with-pic \
-	--prefix=$topdir/build \
-	--includedir=$topdir/build/include \
-	--libdir=$topdir/build/lib
+	--prefix="$topdir/build" \
+	--includedir="$topdir/build/include" \
+	--libdir="$topdir/build/lib"
 make && make install
 cd $topdir
 
 cd "$srcdir/$PNG"
 ./configure --enable-static --disable-shared --with-pic \
-	--prefix=$topdir/build \
-	--includedir=$topdir/build/include \
-	--libdir=$topdir/build/lib
+	--prefix="$topdir/build" \
+	--includedir="$topdir/build/include" \
+	--libdir="$topdir/build/lib"
 make && make install
 cd $topdir
 
 cd "$srcdir/$TIFF"
 ./configure --enable-static --disable-shared --prefix=$topdir/build --with-pic --without-x \
-	--includedir=$topdir/build/include \
-	--libdir=$topdir/build/lib \
-	--with-zlib-include-dir=$topdir/build/include \
-	--with-zlib-lib-dir=$topdir/build/lib \
-	--with-jpeg-include-dir=$topdir/build/include \
-	--with-jpeg-lib-dir=$topdir/build/lib \
+	--includedir="$topdir/build/include" \
+	--libdir="$topdir/build/lib" \
+	--with-zlib-include-dir="$topdir/build/include" \
+	--with-zlib-lib-dir="$topdir/build/lib" \
+	--with-jpeg-include-dir="$topdir/build/include" \
+	--with-jpeg-lib-dir="$topdir/build/lib" \
 	--disable-cxx 
 	
 make && make install
@@ -192,10 +198,10 @@ cd "$srcdir/$HDF4"
 	--disable-fortran \
 	--disable-netcdf \
 	--disable-hdf4-xdr \
-	--includedir=$topdir/build/include \
-	--libdir=$topdir/build/lib \
-	--with-zlib=$topdir/build/ \
-	--with-jpeg=$topdir/build/ && \
+	--includedir="$topdir/build/include" \
+	--libdir="$topdir/build/lib" \
+	--with-zlib="$topdir/build/" \
+	--with-jpeg="$topdir/build/" && \
 make && make install
 cd "$topdir"
 else
@@ -253,7 +259,7 @@ if $windows; then
 	    -DHDF5_ENABLE_Z_LIB_SUPPORT:BOOL=ON \
 	    -DZLIB_ROOT:PATH=$topdir/build/ \
 	    -G"MSYS Makefiles" \
-	    -DCMAKE_INSTALL_PREFIX:PATH=$topdir/build/ \
+	    -DCMAKE_INSTALL_PREFIX:PATH="$topdir/build/" \
 	    ../sources/$HDF5
 	make install
 
@@ -262,13 +268,17 @@ else
 	cd "$srcdir/$HDF5"
 	./configure --enable-static --disable-shared --prefix=$topdir/build --with-pic \
 		--disable-fortran \
-		--includedir=$topdir/build/include \
-		--libdir=$topdir/build/lib \
-		--with-zlib=$topdir/build/ \
+		--includedir="$topdir/build/include" \
+		--libdir="$topdir/build/lib" \
+		--with-zlib="$topdir/build/" \
 		--enable-cxx
 		
 	make && make install
-	cd $topdir
+	cd "$topdir"
 
 fi
 
+# now package the compiled libraries into a tarball
+mkdir "$pkgdir"
+cp -r "$topdir/build/include"  "$topdir/build/lib" "$topdir/build/share" "$pkgdir"
+tar cvjf "$pkgfile" -C "$topdir" "$pkgname"
