@@ -7,16 +7,16 @@ on:
    branches: [ main ]
 
 jobs:
-build:
-  runs-on: ubuntu-latest
-  steps:
-  - name: checkout repo
-    uses: actions/checkout@v2
-  - name: build application
-    run: ./make.sh
-  - name: upload result
-    uses: actions/upload-artifact@v2
-    with:
-        name: tarball-linux
-        path: StaticImglibs_Linux-x86_64.tar.bz2
+    build:
+      runs-on: ubuntu-latest
+      steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: build application
+        run: ./make.sh
+      - name: upload result
+        uses: actions/upload-artifact@v2
+        with:
+            name: tarball-linux
+            path: StaticImglibs_Linux-x86_64.tar.bz2
 
