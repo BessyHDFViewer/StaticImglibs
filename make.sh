@@ -64,7 +64,9 @@ topdir=$(pwd)
 machine=$(uname -sm | tr ' ' '-')
 pkgname="StaticImglibs_$machine"
 pkgdir="$topdir/$pkgname"
-pkgfile="$pkgdir.tar.bz2"
+distdir="$topdir/dist"
+mkdir -p "$distdir"
+pkgfile="$distdir/$pkgname.tar.bz2"
 
 srcdir="$topdir/sources"
 mkdir -p "$srcdir"
