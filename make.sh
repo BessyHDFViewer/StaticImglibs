@@ -29,24 +29,24 @@
 # PATH=$PWD/cmake-3.15.0-rc3-win64-x64/bin:$PATH
 
 # 
-ZLIB=zlib-1.2.8
-JPEG=jpeg-8d
-JPEGSRC=jpegsrc.v8d
+ZLIB=zlib-1.2.11
+JPEG=jpeg-9d
+JPEGSRC=jpegsrc.v9d
 # for jpeg, there is a mismatch between the file name and the TLD name
 TIFF=tiff-4.3.0
 PNG=libpng-1.6.2
 HDF4=hdf-4.2.15
-HDF5=hdf5-1.8.21
+HDF5=hdf5-1.8.22
 
 # use HDF5-1.8 because 1.10 causes problems with simultaneous reading
 
 PKGURLS=(
- $ZLIB $ZLIB.tar.gz https://www.zlib.net/fossils/$ZLIB.tar.gz 44d667c142d7cda120332623eab69f40
- $JPEG $JPEGSRC.tar.gz http://www.ijg.org/files/$JPEGSRC.tar.gz a9b1082e69db9920714b24e89066c7d3
+ $ZLIB $ZLIB.tar.gz https://www.zlib.net/fossils/$ZLIB.tar.gz 1c9f62f0778697a09d36121ead88e08e
+ $JPEG $JPEGSRC.tar.gz http://www.ijg.org/files/$JPEGSRC.tar.gz ad7e40dedc268f97c44e7ee3cd54548a
  $TIFF $TIFF.tar.gz http://download.osgeo.org/libtiff/$TIFF.tar.gz 0a2e4744d1426a8fc8211c0cdbc3a1b3
  $PNG $PNG.tar.gz "http://prdownloads.sourceforge.net/libpng/$PNG.tar.gz?download" b9f33116aafde244d04caf1ee19eb573
  $HDF4 $HDF4.tar.bz2 https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.15/src/$HDF4.tar.bz2 27ab87b22c31906883a0bfaebced97cb
- $HDF5 $HDF5.tar.bz2 https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/$HDF5/src/$HDF5.tar.bz2 2d2408f2a9dfb5c7b79998002e9a90e9
+ $HDF5 $HDF5.tar.bz2 https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/$HDF5/src/$HDF5.tar.bz2 0b083716131466527c2eaeb44a2a7786
 )
 
 
@@ -217,7 +217,7 @@ else
 	# Try using cmake
 	mkdir -p hdf4_build
 	cd hdf4_build
-	cmake \
+	CFLAGS=-Wno-implicit-function-declaration cmake \
 	    -Wno-dev \
 	    -DPOSITION_INDEPENDENT_CODE:BOOL=ON \
 	    -DBUILD_SHARED_LIBS:BOOL=OFF \
@@ -248,7 +248,7 @@ if $windows; then
 
 	mkdir hdf5_build
 	cd hdf5_build
-	cmake \
+	CFLAGS=-Wno-implicit-function-declaration cmake \
 	    -Wno-dev \
 	    -DBUILD_SHARED_LIBS:BOOL=OFF \
 	    -DCMAKE_BUILD_TYPE:STRING=Release \
