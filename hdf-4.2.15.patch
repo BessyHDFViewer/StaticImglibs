@@ -1,0 +1,13 @@
+diff -ruN hdf-4.2.15/hdf/test/tusejpegfuncs.c hdf-4.2.15-patched/hdf/test/tusejpegfuncs.c
+--- hdf-4.2.15/hdf/test/tusejpegfuncs.c	2020-03-03 18:40:50.000000000 +0100
++++ hdf-4.2.15-patched/hdf/test/tusejpegfuncs.c	2021-07-08 18:47:19.142936472 +0200
+@@ -3,8 +3,8 @@
+  * the JPEG package by The Independent JPEG Group                            *
+  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ #include <stdio.h>
+-#include "jpeglib.h"
+ #include "tproto.h"
++#include "jpeglib.h"
+ 
+ #define ABS(x)  ((int)(x)<0 ? (-x) : x)
+ 
