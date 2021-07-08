@@ -157,11 +157,19 @@ done
 rm -rf build hdf4_build hdf5_build "$pkgdir"
 mkdir -p build
 
+function runmake() {
+    # exit with error in case make fails
+    if ! make "$@"; then
+        echo "***Error: Make failed"
+        exit -1
+    fi
+}
 
 # make zlib
 cd "$srcdir/$ZLIB"
 CFLAGS="-fPIC" ./configure --static --64 --prefix="$topdir/build"
-make && make install
+runmake
+runmake install
 cd $topdir
 
 cd "$srcdir/$JPEG"
@@ -169,7 +177,8 @@ cd "$srcdir/$JPEG"
 	--prefix="$topdir/build" \
 	--includedir="$topdir/build/include" \
 	--libdir="$topdir/build/lib"
-make && make install
+runmake
+runmake install
 cd $topdir
 
 cd "$srcdir/$PNG"
@@ -177,7 +186,8 @@ cd "$srcdir/$PNG"
 	--prefix="$topdir/build" \
 	--includedir="$topdir/build/include" \
 	--libdir="$topdir/build/lib"
-make && make install
+runmake
+runmake install
 cd $topdir
 
 cd "$srcdir/$TIFF"
@@ -190,7 +200,8 @@ cd "$srcdir/$TIFF"
 	--with-jpeg-lib-dir="$topdir/build/lib" \
 	--disable-cxx 
 	
-make && make install
+runmake
+runmake install
 cd "$topdir"
 
 ## HDF4
@@ -204,7 +215,8 @@ cd "$srcdir/$HDF4"
 	--libdir="$topdir/build/lib" \
 	--with-zlib="$topdir/build/" \
 	--with-jpeg="$topdir/build/" && \
-make && make install
+runmake
+runmake install
 cd "$topdir"
 else
 
@@ -230,7 +242,7 @@ else
 	    "-G$generator" \
 	    -DCMAKE_INSTALL_PREFIX:PATH="$topdir/build/" \
 	    "$srcdir/$HDF4"
-	make install
+        runmake install
 	cd "$topdir"
 
 fi
@@ -263,7 +275,7 @@ if $windows; then
 	    -G"MSYS Makefiles" \
 	    -DCMAKE_INSTALL_PREFIX:PATH="$topdir/build/" \
 	    ../sources/$HDF5
-	make install
+        runmake install
 
 
 else
@@ -275,7 +287,8 @@ else
 		--with-zlib="$topdir/build/" \
 		--enable-cxx
 		
-	make && make install
+        runmake
+        runmake install
 	cd "$topdir"
 
 fi
