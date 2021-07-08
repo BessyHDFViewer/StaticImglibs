@@ -1,7 +1,7 @@
-diff -ruN zlib-1.2.8/configure zlib-1.2.8-patched/configure
---- zlib-1.2.8/configure	2013-03-24 06:30:09.000000000 +0100
-+++ zlib-1.2.8-patched/configure	2019-07-09 10:01:38.143527100 +0200
-@@ -194,7 +194,7 @@
+diff -ru zlib-1.2.11/configure zlib-1.2.11-patched/configure
+--- zlib-1.2.11/configure	2016-12-31 19:06:40.000000000 +0100
++++ zlib-1.2.11-patched/configure	2021-07-08 19:25:57.000000000 +0200
+@@ -218,7 +218,7 @@
  # temporary bypass
          rm -f $test.[co] $test $test$shared_ext
          echo "Please use win32/Makefile.gcc instead." | tee -a configure.log
@@ -10,3 +10,4 @@ diff -ruN zlib-1.2.8/configure zlib-1.2.8-patched/configure
          LDSHARED=${LDSHARED-"$cc -shared"}
          LDSHAREDLIBC=""
          EXE='.exe' ;;
+Only in zlib-1.2.11-patched/: configure.orig
