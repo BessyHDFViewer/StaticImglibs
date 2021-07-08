@@ -144,10 +144,13 @@ for i in ${!PKGS[@]}; do
 	pkg=${PKGS[$i]}
 	tar="$srcdir/${PKGTARS[$i]}"
 	rm -rf "$srcdir/$pkg"
-	tar -xvf "$tar" -C "$srcdir"
+        echo "Untarring $pkg"
+
+	tar -xf "$tar" -C "$srcdir"
 
 	PATCH="$topdir/$pkg.patch"
-	if [ -e "$pkg.patch" ]; then
+	if [ -e "$PATCH" ]; then
+                echo "Patching $pkg"
 		cd "$srcdir/$pkg"
 		patch -p1 < "$PATCH"
 	fi
