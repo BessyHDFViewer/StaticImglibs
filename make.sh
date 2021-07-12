@@ -40,13 +40,15 @@ HDF5=hdf5-1.8.22
 
 # use HDF5-1.8 because 1.10 causes problems with simultaneous reading
 
+
+# List of packages to build. Package name, URL, MD5 of source, path to license
 PKGURLS=(
- $ZLIB $ZLIB.tar.gz https://www.zlib.net/fossils/$ZLIB.tar.gz 1c9f62f0778697a09d36121ead88e08e
- $JPEG $JPEGSRC.tar.gz http://www.ijg.org/files/$JPEGSRC.tar.gz ad7e40dedc268f97c44e7ee3cd54548a
- $TIFF $TIFF.tar.gz http://download.osgeo.org/libtiff/$TIFF.tar.gz 0a2e4744d1426a8fc8211c0cdbc3a1b3
- $PNG $PNG.tar.gz "http://prdownloads.sourceforge.net/libpng/$PNG.tar.gz?download" b9f33116aafde244d04caf1ee19eb573
- $HDF4 $HDF4.tar.bz2 https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.15/src/$HDF4.tar.bz2 27ab87b22c31906883a0bfaebced97cb
- $HDF5 $HDF5.tar.bz2 https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/$HDF5/src/$HDF5.tar.bz2 0b083716131466527c2eaeb44a2a7786
+ $ZLIB $ZLIB.tar.gz https://www.zlib.net/fossils/$ZLIB.tar.gz 1c9f62f0778697a09d36121ead88e08e README
+ $JPEG $JPEGSRC.tar.gz http://www.ijg.org/files/$JPEGSRC.tar.gz ad7e40dedc268f97c44e7ee3cd54548a README
+ $TIFF $TIFF.tar.gz http://download.osgeo.org/libtiff/$TIFF.tar.gz 0a2e4744d1426a8fc8211c0cdbc3a1b3 COPYRIGHT
+ $PNG $PNG.tar.gz "http://prdownloads.sourceforge.net/libpng/$PNG.tar.gz?download" b9f33116aafde244d04caf1ee19eb573 LICENSE
+ $HDF4 $HDF4.tar.bz2 https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.15/src/$HDF4.tar.bz2 27ab87b22c31906883a0bfaebced97cb COPYING
+ $HDF5 $HDF5.tar.bz2 https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/$HDF5/src/$HDF5.tar.bz2 0b083716131466527c2eaeb44a2a7786 COPYING
 )
 
 
@@ -132,12 +134,12 @@ function downloadlist() {
 		download "$2" "$3" "$4"
 		PKGS+=( "$1" )
 		PKGTARS+=( "$2" )
-		shift 4 
+		LICENSES+=( "$5" )
+		shift 5
 	done
 }
 
 downloadlist ${PKGURLS[@]}
-
 
 # untar and patch
 for i in ${!PKGS[@]}; do
@@ -163,7 +165,15 @@ mkdir -p build
 function runmake() {
     # exit with error in case make fails
     if ! make "$@"; then
-        echo "***Error: Make failed"
+        echo "***Error: Make $@ failed"
+        exit -1
+    fi
+}
+
+function runcp() {
+    # exit with error in case make fails
+    if ! cp "$@"; then
+        echo "***Error: Copy $@ failed"
         exit -1
     fi
 }
@@ -297,6 +307,17 @@ else
 fi
 
 # now package the compiled libraries into a tarball
-mkdir "$pkgdir"
+mkdir -p "$pkgdir"
+licdir="$pkgdir/licenses"
+mkdir -p "$licdir"
+
+# copy the license files of the libraries
+
+for i in ${!PKGS[@]}; do
+	pkg=${PKGS[$i]}
+	lic="$srcdir/$pkg/${LICENSES[$i]}"
+	runcp "$lic" "$licdir/license.terms.$pkg"
+done
+
 cp -r "$topdir/build/include"  "$topdir/build/lib" "$topdir/build/share" "$pkgdir"
 tar cvjf "$pkgfile" -C "$topdir" "$pkgname"
