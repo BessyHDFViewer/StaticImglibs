@@ -118,7 +118,7 @@ function download() {
 		fi
 	fi
 
-	wget -O "$ofile" "$URL"
+	curl "$URL" -LJo "$ofile" 
 
 	RETHASH=$( $MD5 "$ofile")
 
