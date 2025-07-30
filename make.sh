@@ -274,7 +274,7 @@ if $windows; then
 
 	mkdir hdf5_build
 	cd hdf5_build
-	CFLAGS=-Wno-implicit-function-declaration cmake \
+	CFLAGS="-Wno-implicit-function-declaration -D_GNU_SOURCE=1" cmake \
 	    -Wno-dev \
 	    -DBUILD_SHARED_LIBS:BOOL=OFF \
 	    -DCMAKE_BUILD_TYPE:STRING=Release \
