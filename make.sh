@@ -29,13 +29,14 @@
 # PATH=$PWD/cmake-3.15.0-rc3-win64-x64/bin:$PATH
 
 # 
-ZLIB=zlib-1.2.13
-JPEG=jpeg-9e
-JPEGSRC=jpegsrc.v9e
+ZLIB=zlib-1.3.1
+JPEG=jpeg-9f
+JPEGSRC=jpegsrc.v9f
 # for jpeg, there is a mismatch between the file name and the TLD name
-TIFF=tiff-4.5.0
-PNG=libpng-1.6.39
-HDF4=hdf-4.2.16
+TIFF=tiff-4.7.0
+PNG=libpng-1.6.50
+HDF4VERSION=hdf4.3.0
+HDF4=hdf4-$HDF4VERSION  # toplevel dir for 4.3 series is different
 HDF5=hdf5-1.8.23
 
 # use HDF5-1.8 because 1.10 causes problems with simultaneous reading
@@ -43,11 +44,11 @@ HDF5=hdf5-1.8.23
 
 # List of packages to build. Package name, URL, MD5 of source, path to license
 PKGURLS=(
- $ZLIB $ZLIB.tar.gz https://www.zlib.net/fossils/$ZLIB.tar.gz 9b8aa094c4e5765dabf4da391f00d15c README
- $JPEG $JPEGSRC.tar.gz http://www.ijg.org/files/$JPEGSRC.tar.gz 2489f1597b046425f5fcd3cf2df7d85f README
- $TIFF $TIFF.tar.gz http://download.osgeo.org/libtiff/$TIFF.tar.gz db9e220a1971acc64487f1d51a20dcaa LICENSE.md
- $PNG $PNG.tar.gz "http://prdownloads.sourceforge.net/libpng/$PNG.tar.gz?download" 93b8e79a008747e70f7704f600349559 LICENSE
- $HDF4 $HDF4.tar.bz2 https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.16/src/$HDF4.tar.bz2 563a4f7b50712c9a2550626e5b95c7af COPYING
+ $ZLIB $ZLIB.tar.gz https://www.zlib.net/fossils/$ZLIB.tar.gz 9855b6d802d7fe5b7bd5b196a2271655 README
+ $JPEG $JPEGSRC.tar.gz http://www.ijg.org/files/$JPEGSRC.tar.gz 9ca58d68febb0fa9c1c087045b9a5483 README
+ $TIFF $TIFF.tar.gz http://download.osgeo.org/libtiff/$TIFF.tar.gz 3a0fa4a270a4a192b08913f88d0cfbdd LICENSE.md
+ $PNG $PNG.tar.gz "http://prdownloads.sourceforge.net/libpng/$PNG.tar.gz?download" eef2d3da281ae83ac8a8f5fd9fa9d325 LICENSE
+ $HDF4 $HDF4.tar.bz2 https://github.com/HDFGroup/hdf4/archive/refs/tags/$HDF4VERSION.tar.gz 9789b5ad3341ce5f25fac1de231e2608 COPYING
  $HDF5 $HDF5.tar.bz2 https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/$HDF5/src/$HDF5.tar.bz2 66bc4a02321fd41281a78e2bb25ef039 COPYING
 )
 
