@@ -37,7 +37,8 @@ TIFF=tiff-4.7.0
 PNG=libpng-1.6.50
 HDF4VERSION=hdf4.3.0
 HDF4=hdf4-$HDF4VERSION  # toplevel dir for 4.3 series is different
-HDF5=hdf5-1.8.23
+HDF5VERSION=1.14.6
+HDF5=hdf5-$HDF5VERSION
 
 # use HDF5-1.8 because 1.10 causes problems with simultaneous reading
 
@@ -49,7 +50,7 @@ PKGURLS=(
  $TIFF $TIFF.tar.gz http://download.osgeo.org/libtiff/$TIFF.tar.gz 3a0fa4a270a4a192b08913f88d0cfbdd LICENSE.md
  $PNG $PNG.tar.gz "http://prdownloads.sourceforge.net/libpng/$PNG.tar.gz?download" eef2d3da281ae83ac8a8f5fd9fa9d325 LICENSE
  $HDF4 $HDF4.tar.bz2 https://github.com/HDFGroup/hdf4/archive/refs/tags/$HDF4VERSION.tar.gz 9789b5ad3341ce5f25fac1de231e2608 COPYING
- $HDF5 $HDF5.tar.bz2 https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/$HDF5/src/$HDF5.tar.bz2 66bc4a02321fd41281a78e2bb25ef039 COPYING
+ $HDF5 $HDF5.tar.bz2 https://github.com/HDFGroup/hdf5/releases/download/hdf5_$HDF5VERSION/hdf5-$HDF5VERSION.tar.gz 63426c8e24086634eaf9179a8c5fe9e5 COPYING
 )
 
 
