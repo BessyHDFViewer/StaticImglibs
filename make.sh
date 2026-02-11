@@ -30,25 +30,25 @@
 
 # 
 ZLIB=zlib-1.3.1
-JPEG=jpeg-9f
-JPEGSRC=jpegsrc.v9f
+JPEG=jpeg-10
+JPEGSRC=jpegsrc.v10
 # for jpeg, there is a mismatch between the file name and the TLD name
-TIFF=tiff-4.7.0
-PNG=libpng-1.6.50
+TIFF=tiff-4.7.1
+PNG=libpng-1.6.55
 HDF4VERSION=hdf4.3.0
 HDF4=hdf4-$HDF4VERSION  # toplevel dir for 4.3 series is different
 HDF5VERSION=1.14.6
 HDF5=hdf5-$HDF5VERSION
 
-# use HDF5-1.8 because 1.10 causes problems with simultaneous reading
+# HDF5 > 1.8 causes problems with simultaneous reading (flock)
 
 
 # List of packages to build. Package name, URL, MD5 of source, path to license
 PKGURLS=(
  $ZLIB $ZLIB.tar.gz https://www.zlib.net/fossils/$ZLIB.tar.gz 9855b6d802d7fe5b7bd5b196a2271655 README
- $JPEG $JPEGSRC.tar.gz http://www.ijg.org/files/$JPEGSRC.tar.gz 9ca58d68febb0fa9c1c087045b9a5483 README
- $TIFF $TIFF.tar.gz http://download.osgeo.org/libtiff/$TIFF.tar.gz 3a0fa4a270a4a192b08913f88d0cfbdd LICENSE.md
- $PNG $PNG.tar.gz "http://prdownloads.sourceforge.net/libpng/$PNG.tar.gz?download" eef2d3da281ae83ac8a8f5fd9fa9d325 LICENSE
+ $JPEG $JPEGSRC.tar.gz http://www.ijg.org/files/$JPEGSRC.tar.gz cc9eda64fc6281dc24739e29aa9556fc README
+ $TIFF $TIFF.tar.gz http://download.osgeo.org/libtiff/$TIFF.tar.gz f1044dd3b4466cc53464210148e08146 LICENSE.md
+ $PNG $PNG.tar.gz "http://prdownloads.sourceforge.net/libpng/$PNG.tar.gz?download" 9e17ec352a122d82f292402a3da9816d LICENSE
  $HDF4 $HDF4.tar.bz2 https://github.com/HDFGroup/hdf4/archive/refs/tags/$HDF4VERSION.tar.gz 9789b5ad3341ce5f25fac1de231e2608 COPYING
  $HDF5 $HDF5.tar.bz2 https://github.com/HDFGroup/hdf5/releases/download/hdf5_$HDF5VERSION/hdf5-$HDF5VERSION.tar.gz 63426c8e24086634eaf9179a8c5fe9e5 COPYING
 )
@@ -60,9 +60,10 @@ if [ -z "$MAKEFLAGS" ]; then
 fi
 
 # find the top of the build dir
-topdir=$(dirname "$0")
-cd "$topdir"
-topdir=$(pwd)
+scriptdir=$(dirname "$0")
+cd "$scriptdir"
+topdir=$(realpath ${TOPDIR:-$scriptdir})
+mkdir -p $topdir
 
 # define the output file
 machine=$(uname -sm | tr ' ' '-')
@@ -150,9 +151,9 @@ for i in ${!PKGS[@]}; do
 	rm -rf "$srcdir/$pkg"
         echo "Untarring $pkg"
 
-	tar -xf "$tar" -C "$srcdir"
+	tar --no-same-owner -xf "$tar" -C "$srcdir"
 
-	PATCH="$topdir/$pkg.patch"
+	PATCH="$scriptdir/$pkg.patch"
 	if [ -e "$PATCH" ]; then
                 echo "Patching $pkg"
 		cd "$srcdir/$pkg"
