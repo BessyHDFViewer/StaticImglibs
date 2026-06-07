@@ -301,7 +301,8 @@ else
 		--includedir="$topdir/build/include" \
 		--libdir="$topdir/build/lib" \
 		--with-zlib="$topdir/build/" \
-		--enable-cxx
+		--enable-cxx \
+		--enable-file-locking=no
 		
         runmake
         runmake install
