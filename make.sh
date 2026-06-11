@@ -264,15 +264,17 @@ else
 fi
 
 ## HDF5
-if $windows; then
+if true; then
 	# on Windows MINGW, cmake must be used to compile HDF5
 	# autoconf does not work there
 
-	# Further, a patch is necessary for gcc to support
-	# a VC++ variadic macro extension
-	#cd sources/$HDF5/
-	#patch -p1 < ../../$HDF5.patch
-	#cd ../..
+	
+	if $windows; then 
+		generator="MSYS Makefiles"
+	else
+		generator="Unix Makefiles"
+	fi
+
 
 	mkdir hdf5_build
 	cd hdf5_build
@@ -289,7 +291,7 @@ if $windows; then
 	    -DHDF5_ENABLE_Z_LIB_SUPPORT:BOOL=ON \
 	    -DZLIB_ROOT:PATH=$topdir/build/ \
 	    -DHDF5_ENABLE_FLOAT16:BOOL=OFF \
-	    -G"MSYS Makefiles" \
+	    "-G$generator" \
 	    -DCMAKE_INSTALL_PREFIX:PATH="$topdir/build/" \
 	    ../sources/$HDF5
         runmake install
