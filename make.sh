@@ -288,6 +288,7 @@ if $windows; then
 	    -DHDF5_ENABLE_SZIP_SUPPORT:BOOL=OFF \
 	    -DHDF5_ENABLE_Z_LIB_SUPPORT:BOOL=ON \
 	    -DZLIB_ROOT:PATH=$topdir/build/ \
+	    -DHDF5_ENABLE_FLOAT16:BOOL=OFF \
 	    -G"MSYS Makefiles" \
 	    -DCMAKE_INSTALL_PREFIX:PATH="$topdir/build/" \
 	    ../sources/$HDF5
