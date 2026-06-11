@@ -60,7 +60,7 @@ if [ -z "$MAKEFLAGS" ]; then
 fi
 
 # find the top of the build dir
-scriptdir=$(dirname "$0")
+scriptdir=$(realpath $(dirname "$0"))
 cd "$scriptdir"
 topdir=$(realpath ${TOPDIR:-$scriptdir})
 mkdir -p $topdir
