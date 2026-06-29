@@ -18,11 +18,6 @@ jobs:
         steps:
             - name: checkout repo
               uses: actions/checkout@v2
-            - name: Install git sdk
-              if: runner.os == 'Windows'
-              uses: git-for-windows/setup-git-for-windows-sdk@v1
-              with:
-                  flavor: full
 
             - name: build libraries
               run: ./make.sh
