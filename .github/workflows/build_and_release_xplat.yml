@@ -17,7 +17,13 @@ jobs:
                 os: [macos-15-intel, ubuntu-24.04, windows-2022]
         steps:
             - name: checkout repo
-              uses: actions/checkout@v2
+              uses: actions/checkout@v7
+
+            - name: Install git sdk
+              if: runner.os == 'Windows'
+              uses: git-for-windows/setup-git-for-windows-sdk@v1
+              with:
+                  flavor: full
 
             - name: build libraries
               run: ./make.sh
